@@ -18,8 +18,4 @@ export class UpdateUserDTO {
   @IsOptional()
   @IsString()
   public name?: string;
-
-  @IsOptional()
-  @IsString()
-  public password: string;
 }
