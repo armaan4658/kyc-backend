@@ -11,7 +11,8 @@ const authorize = (req: Request, res: Response, next: NextFunction): void => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.body.tokenData = decoded; 
+    const {id, email, role } = (decoded as any);
+    res.locals.tokenData = {id, email, role };
     next();
   } catch (error) {
     throw new HttpError(401, 'Invalid or expired token');
