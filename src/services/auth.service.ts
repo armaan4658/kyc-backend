@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken';
 import User, { User as IUser } from '../models/user.model';
 import HttpError from '../utils/httpError';
 import bcrypt from "bcrypt";
+import { injectable } from 'tsyringe';
 
+@injectable()
 class AuthService {
   private jwtSecret: string;
 
@@ -19,14 +21,12 @@ class AuthService {
         if (!user) {
           throw new HttpError(404,'User not found');
         }
-    
-        
+  
         const isPasswordValid = await user.comparePassword(password);
         if (!isPasswordValid) {
           throw new HttpError(400,'Invalid credentials');
         }
     
-        
         const token = this.generateToken(user);
         const userObject = user.toObject();
         delete (userObject as any).password;

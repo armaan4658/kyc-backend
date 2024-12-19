@@ -6,7 +6,9 @@ import { User as IUser } from '../models/user.model';
 import UserService from '../services/user.service';
 import validationMiddleware from '../middleware/validation.middleware';
 import { CreateUserDTO } from '../dtos/user.dto';
+import { autoInjectable } from 'tsyringe';
 
+@autoInjectable()
 class AuthController {
   public router = Router();
   private authService: AuthService;
@@ -33,7 +35,7 @@ class AuthController {
       }
 
       const result = await this.authService.login(email, password);
-      res.status(200).json({message: 'User logged in successfully', data: result});
+      res.status(200).json({ message: 'User logged in successfully', data: result });
     } catch (error) {
       next(error);
     }
@@ -48,7 +50,7 @@ class AuthController {
       }
 
       const result = await this.authService.resetPassword(email, password);
-      res.status(200).json({message: 'Password reset successfully',data: result});
+      res.status(200).json({ message: 'Password reset successfully' });
     } catch (error) {
       next(error);
     }
@@ -60,7 +62,7 @@ class AuthController {
         if(req.body.role !== 'User') throw new HttpError(400, 'Role must be User');
         const userData: IUser = req.body;
         const createdUser: IUser = await this.userService.createUser(userData);
-        res.status(201).json({ message: 'User successfully created' , data: createdUser });
+        res.status(201).json({ message: 'User successfully created' });
       } catch (error) {
         next(error);
       }
