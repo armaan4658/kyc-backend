@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import UserModel, { User } from '../models/user.model';  
 import HttpError from '../utils/httpError';
+import { injectable } from 'tsyringe';
 
-@Injectable()
+@injectable()
 export default class UserService {
 
   async createUser(userData: User): Promise<User> {
@@ -14,8 +14,7 @@ export default class UserService {
       }
 
       const newUser = new UserModel(userData);
-      await newUser.save();
-      return newUser;
+      return await newUser.save();
     } catch (error) {
       if (error instanceof HttpError) {
         throw error;  
@@ -31,7 +30,9 @@ export default class UserService {
       if (!user) {
         throw new HttpError(404, 'User not found');
       }
-      return user;
+      const userObject = user.toObject();
+      delete (userObject as any).password;
+      return userObject;
     } catch (error) {
       if (error instanceof HttpError) {
         throw error;  
@@ -47,8 +48,11 @@ export default class UserService {
       if (!user) {
         throw new HttpError(404, 'User not found');
       }
-      return user;
+      const userObject = user.toObject();
+      delete (userObject as any).password;
+      return userObject;
     } catch (error) {
+      console.error(error);
       if (error instanceof HttpError) {
         throw error;  
       }
@@ -74,4 +78,30 @@ export default class UserService {
   async getAllUsers(): Promise<User[]> {
     return await UserModel.find({},{name: 1, email: 1, _id: 1});
   }
+
+  async createAdmin(): Promise<string | User> {
+    try {
+      const existingAdmin = await UserModel.findOne({ role: 'Admin' });
+  
+      if (existingAdmin) {
+        return 'Admin user already exists';
+      }
+      
+      const adminData = {
+        name: 'Admin',
+        email: 'admin@test.com',
+        password: 'test', 
+        role: 'Admin',
+      };
+  
+      const adminUser = new UserModel(adminData);
+      return await adminUser.save();
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw error;
+      }
+      throw new HttpError(500, 'Error creating admin user');
+    }
+  }
+  
 }
