@@ -22,4 +22,6 @@ const KYCSchema: Schema = new Schema(
   }
 );
 
+KYCSchema.index({ user: 1 });
+
 export default mongoose.model<KYC>('KYC', KYCSchema);
