@@ -7,6 +7,8 @@ export interface KYC extends Document {
   documentBase64: string; 
   status: 'Pending' | 'Approved' | 'Rejected'; 
   submittedAt: Date;
+  approved_by?: string; 
+  approved_on?: Date; 
 }
 
 const KYCSchema: Schema = new Schema(
@@ -16,9 +18,11 @@ const KYCSchema: Schema = new Schema(
     email: { type: String, required: true },
     documentBase64: { type: String, required: true }, 
     status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+    approved_by: { type: String }, 
+    approved_on: { type: Date }, 
   },
   {
-    timestamps: { createdAt: 'submittedAt', updatedAt: false },
+    timestamps: { createdAt: true, updatedAt: false },
   }
 );
 

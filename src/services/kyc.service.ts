@@ -41,7 +41,7 @@ export default class KycService {
 
    async getKycStatus(user: string): Promise<any> {
     try {
-      const kyc = await Kyc.findOne({ user },{_id: 1, name: 1, email: 1, status: 1});
+      const kyc = await Kyc.findOne({ user },{_id: 1, name: 1, email: 1, status: 1, approved_by: 1, approved_on: 1});
       if (!kyc) {
         throw new HttpError(404, 'KYC not found');
       }
@@ -55,14 +55,16 @@ export default class KycService {
   }
 
  
-   async updateKycStatus(user: string, status: 'Pending' | 'Approved' | 'Rejected'): Promise<any> {
+   async updateKycStatus(user: string, status: 'Pending' | 'Approved' | 'Rejected', approvedBy: string): Promise<any> {
     try {
-      const kyc = await Kyc.findOne({ user }, {_id: 1, name: 1, email: 1, status: 1});
+      const kyc = await Kyc.findOne({ user }, {_id: 1, name: 1, email: 1, status: 1, approved_by: 1, approved_on: 1});
       if (!kyc) {
         throw new HttpError(404, 'KYC not found');
       }
 
       kyc.status = status;
+      kyc.approved_by = approvedBy;
+      kyc.approved_on = new Date();
       await kyc.save();
       return kyc;
     } catch (error) {
@@ -76,7 +78,7 @@ export default class KycService {
   
    async getAllKycSubmissions(): Promise<any[]> {
     try {
-      const kycSubmissions = await Kyc.find({},{_id: 1, user: 1, name: 1, email: 1, status: 1});
+      const kycSubmissions = await Kyc.find({},{_id: 1, name: 1, email: 1, status: 1, approved_by: 1, approved_on: 1});
       return kycSubmissions;
     } catch (error) {
       if (error instanceof HttpError) {

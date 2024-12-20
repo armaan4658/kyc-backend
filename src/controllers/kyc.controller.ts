@@ -71,8 +71,9 @@ export default class KycController {
     try {
       const { userId } = req.params;
       const { status } = req.body;
+      const approvedBy = res.locals.tokenData.email;
 
-      const kyc = await this.kycService.updateKycStatus(userId, status);
+      const kyc = await this.kycService.updateKycStatus(userId, status, approvedBy);
       res.status(200).json({ message: 'KYC updated successfully', data: kyc });
     } catch (error) {
       next(error);
