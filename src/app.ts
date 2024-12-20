@@ -9,6 +9,8 @@ import AuthController from './controllers/auth.controller';
 import KycController from './controllers/kyc.controller';
 import authorize from './middleware/authorize.middleware';
 import { container } from 'tsyringe';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +29,13 @@ class App {
 
   private initializeMiddlewares(): void {
     this.app.use(cors());
+    this.app.use(helmet());
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 100, 
+      message: 'Too many requests from this IP, please try again later.',
+    });
+    this.app.use(limiter);
     this.app.use(express.json());
   }
 
