@@ -11,8 +11,8 @@ class UserController {
   public router = Router();
   private userService: UserService;
 
-  constructor() {
-    this.userService = new UserService();
+  constructor(userService?: UserService) {
+    this.userService = userService!;
     this.initializeRoutes();
   }
 

@@ -14,9 +14,9 @@ class AuthController {
   private authService: AuthService;
   private userService: UserService
 
-  constructor() {
-    this.authService = new AuthService();
-    this.userService = new UserService();
+  constructor(authService? : AuthService, userService?: UserService) {
+    this.authService = authService!;
+    this.userService = userService!;
     this.initializeRoutes();
   }
 

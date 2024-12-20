@@ -12,9 +12,9 @@ export default class KycController {
   public router: express.Router;
   private kycService : KycService;
 
-  constructor() {
+  constructor(kycService? : KycService) {
     this.router = express.Router();
-    this.kycService = new KycService();
+    this.kycService = kycService!;
     this.initializeRoutes();
   }
 
