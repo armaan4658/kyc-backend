@@ -51,7 +51,9 @@ class UserController {
 
   private getAllUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
-      const user = await this.userService.getAllUsers();
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const user = await this.userService.getAllUsers(page, limit);
       res.status(200).json({ message: 'Users successfully fetched' , data: user });
     } catch (error) {
       next(error);

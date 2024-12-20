@@ -75,8 +75,31 @@ export default class UserService {
     }
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await UserModel.find({},{name: 1, email: 1, _id: 1});
+  async getAllUsers(page: number = 1, limit: number = 10): Promise<any> {
+    try {
+      const skip = (page - 1) * limit; 
+      const users = await UserModel.find(
+        {},
+        {name: 1, email: 1, _id: 1}
+      )
+      .skip(skip)
+      .limit(limit);
+
+      const totalUserCount = await UserModel.countDocuments();
+
+      return {
+        page,
+        limit,
+        totalPages: Math.ceil(totalUserCount / limit),
+        totalRecords: totalUserCount,
+        users
+      };
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw error;
+      }
+      throw new HttpError(500, "Error fetching users");
+    }
   }
 
   async createAdmin(): Promise<string | User> {

@@ -83,7 +83,9 @@ export default class KycController {
 
   private getAllKycSubmissions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const kycSubmissions = await this.kycService.getAllKycSubmissions();
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const kycSubmissions = await this.kycService.getAllKycSubmissions(page, limit);
       res.status(200).json({ message: 'KYC data retrieved successfully',  data: kycSubmissions });
     } catch (error) {
       next(error);
