@@ -68,6 +68,14 @@ This project is a backend application built with Node.js, TypeScript, and Expres
    npm run dev
    ```
 
+5. Use below credential to login as admin:
+   ```bash
+   {
+    "email": "admin@test.com",
+    "password": "test"
+   }
+   ```
+
 ---
 
 ## Environment Variables
