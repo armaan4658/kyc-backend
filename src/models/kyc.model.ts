@@ -20,6 +20,7 @@ const KYCSchema: Schema = new Schema(
     status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
     approved_by: { type: String }, 
     approved_on: { type: Date }, 
+    submittedAt: {type: Date }
   },
   {
     timestamps: { createdAt: true, updatedAt: false },

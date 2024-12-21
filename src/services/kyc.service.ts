@@ -24,6 +24,7 @@ export default class KycService {
         name: kycData.name,
         email: kycData.email,
         documentBase64: kycData.document,
+        submittedAt: new Date(),
         status: 'Pending',
       });
 
@@ -79,10 +80,7 @@ export default class KycService {
   async getAllKycSubmissions(page: number = 1, limit: number = 10): Promise<any> {
     try {
       const skip = (page - 1) * limit; 
-      const kycSubmissions = await Kyc.find(
-        {}, 
-        {_id: 1, name: 1, email: 1, status: 1, approved_by: 1, approved_on: 1}
-      )
+      const kycSubmissions = await Kyc.find()
       .skip(skip)
       .limit(limit);
   

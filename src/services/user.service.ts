@@ -80,7 +80,7 @@ export default class UserService {
       const skip = (page - 1) * limit; 
       const users = await UserModel.find(
         {},
-        {name: 1, email: 1, _id: 1}
+        {name: 1, email: 1, _id: 1, role: 1}
       )
       .skip(skip)
       .limit(limit);
